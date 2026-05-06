@@ -1,0 +1,313 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "API Gestion de Bibliothèque",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/",
+            "description": "Serveur de développement"
+        },
+        {
+            "url": "https://tp-final-sw.onrender.com/",
+            "description": "Serveur en ligne"
+        }
+    ],
+    "paths": {
+        "/api/bibliotheque/inscription": {
+            "post": {
+                "summary": "Créer une bibliothèque",
+                "tags": ["Bibliothèque"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": { "type": "string", "example": "Maktaba El Arous" },
+                                    "courriel": { "type": "string", "example": "elarous@maktaba.tn" },
+                                    "password": { "type": "string", "example": "password123" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": { "description": "Bibliothèque créée avec succès" },
+                    "400": { "description": "Champs manquants" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/bibliotheque/cle-api": {
+            "post": {
+                "summary": "Récupérer ou générer une clé API",
+                "tags": ["Bibliothèque"],
+                "description": "Retourne la clé API. Le paramètre optionnel nouvelle=true génère une nouvelle clé.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "nouvelle",
+                        "required": false,
+                        "schema": { "type": "boolean", "example": true }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "courriel": { "type": "string", "example": "elarous@maktaba.tn" },
+                                    "password": { "type": "string", "example": "password123" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Clé API retournée avec succès" },
+                    "400": { "description": "Champs manquants" },
+                    "401": { "description": "Courriel ou mot de passe invalide" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/livres": {
+            "get": {
+                "summary": "Lister les livres",
+                "tags": ["Livres"],
+                "description": "Retourne les livres disponibles. Paramètre tous=true pour tout afficher.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "tous",
+                        "required": false,
+                        "schema": { "type": "boolean", "example": true }
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Liste retournée avec succès" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            },
+            "post": {
+                "summary": "Ajouter un livre",
+                "tags": ["Livres"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": { "type": "string", "example": "El Ayyam" },
+                                    "auteur": { "type": "string", "example": "Taha Hussein" },
+                                    "isbn": { "type": "string", "example": "978-9-97-340001-1" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": { "description": "Livre ajouté avec succès" },
+                    "400": { "description": "Champs manquants" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/livres/{id}": {
+            "get": {
+                "summary": "Afficher le détail d'un livre",
+                "tags": ["Livres"],
+                "parameters": [
+                    { "in": "path", "name": "id", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "responses": {
+                    "200": { "description": "Livre retourné avec succès" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Livre non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            },
+            "put": {
+                "summary": "Modifier un livre",
+                "tags": ["Livres"],
+                "parameters": [
+                    { "in": "path", "name": "id", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": { "type": "string", "example": "El Ayyam" },
+                                    "auteur": { "type": "string", "example": "Taha Hussein" },
+                                    "isbn": { "type": "string", "example": "978-9-97-340001-1" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Livre modifié avec succès" },
+                    "400": { "description": "Champs manquants" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Livre non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un livre",
+                "tags": ["Livres"],
+                "parameters": [
+                    { "in": "path", "name": "id", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "responses": {
+                    "200": { "description": "Livre supprimé avec succès" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Livre non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/livres/{id}/statut": {
+            "patch": {
+                "summary": "Modifier le statut d'un livre",
+                "tags": ["Livres"],
+                "parameters": [
+                    { "in": "path", "name": "id", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "disponible": { "type": "boolean", "example": false }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Statut modifié avec succès" },
+                    "400": { "description": "Champ disponible manquant" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Livre non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/livres/{livreId}/prets": {
+            "post": {
+                "summary": "Ajouter un prêt",
+                "tags": ["Prêts"],
+                "parameters": [
+                    { "in": "path", "name": "livreId", "required": true, "schema": { "type": "integer", "example": 2 } }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "emprunteur": { "type": "string", "example": "Mohamed Ben Ali" },
+                                    "date_retour": { "type": "string", "example": "2026-05-01" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": { "description": "Prêt ajouté avec succès" },
+                    "400": { "description": "Champs manquants" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Livre non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/prets/{pretId}": {
+            "put": {
+                "summary": "Modifier un prêt",
+                "tags": ["Prêts"],
+                "parameters": [
+                    { "in": "path", "name": "pretId", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "emprunteur": { "type": "string", "example": "Mohamed Ben Ali" },
+                                    "date_retour": { "type": "string", "example": "2026-05-15" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Prêt modifié avec succès" },
+                    "400": { "description": "Champs manquants" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Prêt non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un prêt",
+                "tags": ["Prêts"],
+                "parameters": [
+                    { "in": "path", "name": "pretId", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "responses": {
+                    "200": { "description": "Prêt supprimé avec succès" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Prêt non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        },
+        "/api/prets/{pretId}/statut": {
+            "patch": {
+                "summary": "Modifier le statut d'un prêt",
+                "tags": ["Prêts"],
+                "parameters": [
+                    { "in": "path", "name": "pretId", "required": true, "schema": { "type": "integer", "example": 1 } }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "statut": { "type": "string", "example": "retourné" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Statut du prêt modifié avec succès" },
+                    "400": { "description": "Champ statut manquant ou invalide" },
+                    "401": { "description": "Clé API manquante ou invalide" },
+                    "404": { "description": "Prêt non trouvé" },
+                    "500": { "description": "Erreur serveur" }
+                }
+            }
+        }
+    }
+}
