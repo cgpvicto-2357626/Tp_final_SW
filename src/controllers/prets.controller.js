@@ -88,7 +88,7 @@ const modifierPret = async (req, res) => {
     }
 };
 
-const modifierStatusPret = async (req, res) => {
+const modifierStatutPret = async (req, res) => {
     const pretId = req.params.pretId;
     const statut = req.body.statut;
     if (!pretId) {
